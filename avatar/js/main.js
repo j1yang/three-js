@@ -1,5 +1,48 @@
 import {} from './../node_modules/three/build/three.js';
 import {} from "./../node_modules/three/examples/js/loaders/GLTFLoader.js";
+import {} from "./../node_modules/three/examples/js/controls/OrbitControls.js";
+
+function glbLoader(MODEL_PATH){
+  var loader = new THREE.GLTFLoader();
+
+  loader.load(
+    MODEL_PATH,
+    function(gltf){
+      model = gltf.scene;
+      anims = gltf.animations;
+
+      //model traverse
+      model.traverse(obj => {
+        // if(obj.isBone){
+        //   console.log(obj.name);
+        // }
+
+        if(obj.isMesh){
+          obj.castShadow = true;
+          obj.receiveShadow = true;
+        }
+
+        if (obj.isBone && obj.name === 'Neck') { 
+          neck = obj;
+        }
+        if (obj.isBone && obj.name === 'Spine') { 
+          waist = obj;
+        }
+      })
+
+      model.scale.set(10,10,10);
+
+      model.position.y = -11;
+
+      scene.add(model);
+    }
+  ),
+  undefined,
+  function(error){
+    console.error(error);
+  };
+
+}
 
 let scene = new THREE.Scene(),
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ),
@@ -7,12 +50,40 @@ let scene = new THREE.Scene(),
   model,
   anims,
   mixer;
-  
+
+let neck, waist;
   
 init();
 update();
+
+var controls = new THREE.OrbitControls(camera,renderer.domElement)
+controls.addEventListener('change', render);//Monitor mouse and keyboard events
+
+document.addEventListener('mousemove', function(e) {
+  var mousecoords = getMousePos(e);
+  if (neck && waist) {
+      moveJoint(mousecoords, neck, 50);//degreeLimit to 50
+      moveJoint(mousecoords, waist, 30);
+  }
+});
+
+
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+
+function render() {
+  renderer.render(scene,camera);
+}
+
+function update() {
+  if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+  renderer.render(scene, camera);
+  requestAnimationFrame(update);
+}
 
 function init(){
   const backgroundColour = 0xf1f1f1;
@@ -72,45 +143,6 @@ function init(){
   mixer = new THREE.AnimationMixer(model);
 }
 
-
-function glbLoader(MODEL_PATH){
-  var loader = new THREE.GLTFLoader();
-
-  loader.load(
-    MODEL_PATH,
-    function(gltf){
-      model = gltf.scene;
-      anims = gltf.animations;
-
-      //model traverse
-      model.traverse(obj => {
-        console.log(obj);
-      })
-
-      model.scale.set(10,10,10);
-
-      model.position.y = -11;
-
-      scene.add(model);
-    }
-  ),
-  undefined,
-  function(error){
-    console.error(error);
-  };
-
-}
-
-function update() {
-  if (resizeRendererToDisplaySize(renderer)) {
-      const canvas = renderer.domElement;
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-    }
-  renderer.render(scene, camera);
-  requestAnimationFrame(update);
-}
-
 function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;
   let width = window.innerWidth;
@@ -126,6 +158,57 @@ function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
-function render() {
-  renderer.render(scene,camera);
+function getMousePos(e) {
+  return { x: e.clientX, y: e.clientY };
 }
+
+//moveJoint
+function moveJoint(mouse, joint, degreeLimit) {
+  let degrees = getMouseDegrees(mouse.x, mouse.y, degreeLimit);
+  joint.rotation.y = THREE.MathUtils.degToRad(degrees.x);
+  joint.rotation.x = THREE.MathUtils.degToRad(degrees.y);
+}
+
+function getMouseDegrees(x, y, degreeLimit) {
+  let dx = 0,
+      dy = 0,
+      xdiff,
+      xPercentage,
+      ydiff,
+      yPercentage;
+  
+  let w = { x: window.innerWidth, y: window.innerHeight };
+  
+  // Left (Rotates neck left between 0 and -degreeLimit)
+  
+      // 1. If cursor is in the left half of screen
+  if (x <= w.x / 2) {
+      // 2. Get the difference between middle of screen and cursor position
+      xdiff = w.x / 2 - x;  
+      // 3. Find the percentage of that difference (percentage toward edge of screen)
+      xPercentage = (xdiff / (w.x / 2)) * 100;
+      // 4. Convert that to a percentage of the maximum rotation we allow for the neck
+      dx = ((degreeLimit * xPercentage) / 100) * -1; }
+  // Right (Rotates neck right between 0 and degreeLimit)
+  if (x >= w.x / 2) {
+      xdiff = x - w.x / 2;
+      xPercentage = (xdiff / (w.x / 2)) * 100;
+      dx = (degreeLimit * xPercentage) / 100;
+  }
+  // Up (Rotates neck up between 0 and -degreeLimit)
+  if (y <= w.y / 2) {
+      ydiff = w.y / 2 - y;
+      yPercentage = (ydiff / (w.y / 2)) * 100;
+      // Note that I cut degreeLimit in half when she looks up
+      dy = (((degreeLimit * 0.5) * yPercentage) / 100) * -1;
+      }
+  
+  // Down (Rotates neck down between 0 and degreeLimit)
+  if (y >= w.y / 2) {
+      ydiff = y - w.y / 2;
+      yPercentage = (ydiff / (w.y / 2)) * 100;
+      dy = (degreeLimit * yPercentage) / 100;
+  }
+  return { x: dx, y: dy };
+}
+
