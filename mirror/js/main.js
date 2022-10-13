@@ -1,7 +1,7 @@
 import {} from './../node_modules/three/build/three.js';
 import {} from "./../node_modules/three/examples/js/loaders/GLTFLoader.js";
 import {} from "./../node_modules/three/examples/js/controls/OrbitControls.js";
-
+import {} from "./../node_modules/three/examples/js/objects/Reflector.js";
 
 function glbLoader(MODEL_PATH){
   var loader = new THREE.GLTFLoader();
@@ -142,6 +142,24 @@ function init(){
 
   //init mixer
   mixer = new THREE.AnimationMixer(model);
+
+
+  //init mirror
+  const mirrorOption = {
+    clipBias: 0.000,
+    textureWidth: window.innerWidth * window.devicePixelRatio,
+    textureHeight: window.innerHeight * window.devicePixelRatio,
+    color: 0x808080,
+    mulitisample: 4
+  }
+  const mirrorGeometry = new THREE.PlaneGeometry( 30, 30); 
+
+  const mirror = new THREE.Reflector(mirrorGeometry, mirrorOption);
+  // const mirrorMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } ); 
+  // const mirrorMesh = new THREE.Mesh( mirrorGeometry, mirrorMaterial ); 
+  mirror.rotateX(Math.PI);
+  mirror.position.set(0, -3, 10);
+  scene.add( mirror );
 }
 
 function resizeRendererToDisplaySize(renderer) {
