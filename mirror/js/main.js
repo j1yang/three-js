@@ -132,9 +132,9 @@ function init(){
   scene.add(floor);
 
   //init camera
-  camera.position.z = 30;
-  camera.position.x = 0;
-  camera.position.y = -3;
+  camera.position.z = 15;
+  camera.position.x = 10;
+  camera.position.y = 20;
 
   //init model
   const MODEL_PATH = '/avatar/avatars/basic_rpm.glb';
@@ -150,9 +150,10 @@ function init(){
     textureWidth: window.innerWidth * window.devicePixelRatio,
     textureHeight: window.innerHeight * window.devicePixelRatio,
     color: 0x808080,
-    mulitisample: 4
+    mulitisample: 4,
+    border: 2
   }
-  const mirrorGeometry = new THREE.PlaneGeometry( 30, 30); 
+  const mirrorGeometry = new THREE.BoxGeometry( 30, 30,1); 
 
   const mirror = new THREE.Reflector(mirrorGeometry, mirrorOption);
   // const mirrorMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } ); 
