@@ -11,7 +11,7 @@ gltf-transform etc1s output1.glb output2.glb --quality 255 --verbose
 
 <!-- METHOD 2: UASTC -->
 
-gltf-transform uastc input.glb output.glb --level 4 --rdo-quality 4 --zstd 18 --verbose
+gltf-transform uastc input.glb output.glb --level 4 --rdo 4 --zstd 18 --verbose
 
 <!-- METHOD 3: ETC1S -->
 
