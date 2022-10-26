@@ -36,18 +36,22 @@ def compressUASTC(inputFiles, outputFiles):
     while True:
         try:
             zstdLevel = int(input("UASTC zstd Lever [1, 22]: "))
-            if 0 <= zstdLevel <= 22:
-                return zstdLevel
-        except (ValueError, TypeError):
-            pass
 
-        for i in range(len(inputFiles)):
-            command = ["gltf-transform", "uastc",
-                       inputFiles[i], outputFiles[i], "--level", "4", "--rdo", "4", "--zstd", zstdLevel, "--verbose"]
-            # display command
-            print(command)
-            # run command
-            subprocess.run(command, shell=True)
+        except not 0 <= zstdLevel <= 22:
+            print("Please enter a valid integer")
+            continue
+        else:
+            break
+
+    print(zstdLevel)
+
+    for i in range(len(inputFiles)):
+        command = ["gltf-transform", "uastc",
+                   inputFiles[i], outputFiles[i], "--level", "4", "--rdo", "4", "--zstd", str(zstdLevel), "--verbose"]
+        # display command
+        print(command)
+        # run command
+        subprocess.run(command, shell=True)
 
 
 command = []
@@ -70,9 +74,9 @@ outputFiles = list(map(createOutputFile, inputFiles))
 # Get compression parameter settings
 if ktx2Type == '1':
     # Create output folder if doesn't exist
-    Path(inputPath + "_ktx2_etc1s").mkdir(parents=True, exist_ok=True)
+    Path(".\\" + inputPath + "_ktx2_etc1s").mkdir(parents=True, exist_ok=True)
     compressETC1S(inputFiles, outputFiles)
 elif ktx2Type == '2':
     # Create output folder if doesn't exist
-    Path(inputPath + "_ktx2_uastc").mkdir(parents=True, exist_ok=True)
+    Path(".\\" + inputPath + "_ktx2_uastc").mkdir(parents=True, exist_ok=True)
     compressUASTC(inputFiles, outputFiles)
