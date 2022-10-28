@@ -5,10 +5,30 @@ from venv import create
 import os
 
 
+def printOption(menu, min, max):
+    option = 0
+    while True:
+        try:
+            print(menu, end=" ")
+            option = int(input())
+            print("\n")
+        except ValueError:
+            print("\n")
+            print('\033[91m' + "ERROR: Please enter a valid integer" + '\033[0m')
+            continue
+        if min <= option <= max:
+            break
+        else:
+            print('\033[91m' + "ERROR: input range [" +
+                  str(min) + "," + str(max) + "]" + '\033[0m')
+
+    return option
+
+
 def createOutputFile(inputFile):
     symbol = ''
 
-    if ktx2Type == '1':
+    if option == 1:
         symbol = "_etc1s"
     else:
         symbol = "_uastc"
@@ -65,7 +85,7 @@ Automatic KTX2 Compressor
 
 # __MAIN__
 
-# Get folder path that contains glb ./glbfiles
+# Get folder path that contains glb glbfiles
 while True:
     print("Folder Name:", end=" ")
     inputPath = input()
@@ -82,20 +102,22 @@ while True:
 inputFiles = glob.glob(inputPath + "\*.glb")
 
 # Get ktx2 type
-print("1. etc1s")
-print("2. uastc")
-print("Select KTX2 Compression Type:", end=" ")
-ktx2Type = input()
+print()
+option = printOption(
+    "1. KTX2: ETC1S\n2. KTX2: UASTC\n3. Resize Texture\nSelect option:", 1, 3)
 print("\n")
 # Create output files names
 outputFiles = list(map(createOutputFile, inputFiles))
 
-# Get compression parameter settings
-if ktx2Type == '1':
-    # Create output folder if doesn't exist
-    Path(".\\" + inputPath + "_ktx2_etc1s").mkdir(parents=True, exist_ok=True)
-    compressETC1S(inputFiles, outputFiles)
-elif ktx2Type == '2':
-    # Create output folder if doesn't exist
-    Path(".\\" + inputPath + "_ktx2_uastc").mkdir(parents=True, exist_ok=True)
-    compressUASTC(inputFiles, outputFiles)
+match option:
+    case 1:
+        # Create output folder if doesn't exist
+        Path(".\\" + inputPath + "_ktx2_etc1s").mkdir(parents=True, exist_ok=True)
+        compressETC1S(inputFiles, outputFiles)
+    case 2:
+        # Create output folder if doesn't exist
+        Path(".\\" + inputPath + "_ktx2_uastc").mkdir(parents=True, exist_ok=True)
+        compressUASTC(inputFiles, outputFiles)
+    case 3:
+        # resize
+        print
