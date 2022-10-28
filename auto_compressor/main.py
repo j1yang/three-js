@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 import glob
+from turtle import width
 from venv import create
 import os
 
@@ -77,6 +78,40 @@ def compressUASTC(inputFiles, outputFiles):
         subprocess.run(command, shell=True)
 
 
+def resizeImages(inputFiles, outputFiles):
+    resizeOption = printOption(
+        "1. 4K\n2. 2K\n3. 1K\n4. Custom\nSelect resize option: ", 1, 4)
+
+    match resizeOption:
+        case 1:
+            print('4k')
+            # Create output folder if doesn't exist
+            Path(".\\" + inputPath + "_resize_4k").mkdir(parents=True, exist_ok=True)
+        case 2:
+            print('2k')
+            # Create output folder if doesn't exist
+            Path(".\\" + inputPath + "_resize_2K").mkdir(parents=True, exist_ok=True)
+        case 3:
+            print('1k')
+            # Create output folder if doesn't exist
+            Path(".\\" + inputPath + "_resize_1K").mkdir(parents=True, exist_ok=True)
+        case 4:
+            width = printOption("Enter width: ", 100, 4096)
+            height = printOption("Enter height: ", 100, 4096)
+            # Create output folder if doesn't exist
+            Path(".\\" + inputPath + "_resize_" + str(width) + 'x' +
+                 str(height)).mkdir(parents=True, exist_ok=True)
+            print(str(width) + ' ' + str(height))
+
+    # for i in range(len(inputFiles)):
+    #     command = ["gltf-transform", "uastc",
+    #                inputFiles[i], outputFiles[i], "--level", "4", "--rdo", "4", "--zstd", str(zstdLevel), "--verbose"]
+    #     # display command
+    #     print('\033[92m' + str(command) + '\033[0m')
+    #     # run command
+    #     subprocess.run(command, shell=True)
+
+
 command = []
 
 '''
@@ -101,11 +136,13 @@ while True:
 # get all file paths
 inputFiles = glob.glob(inputPath + "\*.glb")
 
-# Get ktx2 type
+# Get option
 print()
 option = printOption(
     "1. KTX2: ETC1S\n2. KTX2: UASTC\n3. Resize Texture\nSelect option:", 1, 3)
 print("\n")
+
+
 # Create output files names
 outputFiles = list(map(createOutputFile, inputFiles))
 
@@ -120,4 +157,4 @@ match option:
         compressUASTC(inputFiles, outputFiles)
     case 3:
         # resize
-        print
+        resizeImages(inputFiles, outputFiles)
