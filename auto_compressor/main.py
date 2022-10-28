@@ -31,8 +31,10 @@ def createOutputFile(inputFile):
 
     if option == 1:
         symbol = "_etc1s"
-    else:
+    elif option == 2:
         symbol = "_uastc"
+    elif option == 3:
+        return ''
 
     file = Path(inputFile).stem + "_ktx2" + symbol + ".glb"
     return inputPath + "_ktx2" + symbol + "\\" + file
@@ -78,38 +80,45 @@ def compressUASTC(inputFiles, outputFiles):
         subprocess.run(command, shell=True)
 
 
-def resizeImages(inputFiles, outputFiles):
+def resizeImages(inputFiles):
     resizeOption = printOption(
         "1. 4K\n2. 2K\n3. 1K\n4. Custom\nSelect resize option: ", 1, 4)
 
     match resizeOption:
         case 1:
-            print('4k')
             # Create output folder if doesn't exist
-            Path(".\\" + inputPath + "_resize_4k").mkdir(parents=True, exist_ok=True)
+            Path(".\\" + inputPath + "_resize_4K").mkdir(parents=True, exist_ok=True)
+            # Resize image
+            resize(4096, 4096, inputFiles, ".\\" + inputPath + "_resize_4K")
         case 2:
-            print('2k')
             # Create output folder if doesn't exist
             Path(".\\" + inputPath + "_resize_2K").mkdir(parents=True, exist_ok=True)
+            # Resize image
+            resize(2048, 2048, inputFiles, ".\\" + inputPath + "_resize_2K")
         case 3:
-            print('1k')
             # Create output folder if doesn't exist
             Path(".\\" + inputPath + "_resize_1K").mkdir(parents=True, exist_ok=True)
+            # Resize image
+            resize(1024, 1024, inputFiles, ".\\" + inputPath + "_resize_1K")
         case 4:
             width = printOption("Enter width: ", 100, 4096)
             height = printOption("Enter height: ", 100, 4096)
             # Create output folder if doesn't exist
             Path(".\\" + inputPath + "_resize_" + str(width) + 'x' +
                  str(height)).mkdir(parents=True, exist_ok=True)
-            print(str(width) + ' ' + str(height))
+            # Resize image
+            resize(width, height, inputFiles, ".\\" + inputPath + "_resize_" + str(width) + 'x' +
+                   str(height))
 
-    # for i in range(len(inputFiles)):
-    #     command = ["gltf-transform", "uastc",
-    #                inputFiles[i], outputFiles[i], "--level", "4", "--rdo", "4", "--zstd", str(zstdLevel), "--verbose"]
-    #     # display command
-    #     print('\033[92m' + str(command) + '\033[0m')
-    #     # run command
-    #     subprocess.run(command, shell=True)
+
+def resize(width, height, inputFiles, folderPath):
+    for i in range(len(inputFiles)):
+        command = ["gltf-transform", "resize",
+                   "--width", str(width), "--height", str(height), inputFiles[i], folderPath + '\\' + Path(str(inputFiles[i])).stem + '.glb', "--verbose"]
+        # display command
+        print('\033[92m' + str(command) + '\033[0m')
+        # run command
+        subprocess.run(command, shell=True)
 
 
 command = []
@@ -157,4 +166,4 @@ match option:
         compressUASTC(inputFiles, outputFiles)
     case 3:
         # resize
-        resizeImages(inputFiles, outputFiles)
+        resizeImages(inputFiles)
