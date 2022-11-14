@@ -1,0 +1,62 @@
+.header{
+  display: flex;
+  height: 70px;
+}
+
+.title{
+  width: 30%;
+  display: flex;
+  border: 1px solid purple;
+}
+
+.logo{
+  font-size: 50px;
+  color: red;
+  padding: 0 1em;
+}
+
+.name{
+  margin: 0.3em;
+}
+
+.settings{
+  width: 50%;
+  border: 1px solid purple;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.numPic{
+  width: 30%;
+  display: flex;
+  border:1px solid black;
+  justify-content: space-evenly;
+}
+
+.two{
+  width: 50px;
+  height: 20px;
+  padding: 1em;
+  border: 1px solid black;
+}
+.three{
+  width: 50px;
+  height: 20px;
+  padding: 1em;
+  border: 1px solid black;
+}
+
+.colNames{
+  width: 50%;
+  border:1px solid black
+}
+
+.enter{
+  width: 20%;
+  border:1px solid black
+}
+
+.progress{
+  width: 20%;
+  border: 1px solid purple;
+}
