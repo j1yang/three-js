@@ -249,7 +249,8 @@ match option:
     case 2:
         # Create output folder if doesn't exist
         Path(".\\" + inputPath + "_ktx2_uastc").mkdir(parents=True, exist_ok=True)
-        compressUASTC(outputFiles, outputFiles)
+        compressUASTC(inputFiles, outputFiles)
+        addDataToExcel(outputFiles, xlxsPath)
         print('\033[92m' + "Inspecting Files Completed! \nPath: " +
               xlxsPath + '\033[0m')
     case 3:
