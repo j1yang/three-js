@@ -29,7 +29,7 @@
 .numPic{
   width: 30%;
   display: flex;
-  border:1px solid black;
+  border:1px solid red;
   justify-content: space-evenly;
 }
 
@@ -37,12 +37,14 @@
   width: 50px;
   height: 20px;
   padding: 1em;
+  margin-top: 6px;
   border: 1px solid black;
 }
 .three{
   width: 50px;
   height: 20px;
   padding: 1em;
+  margin-top: 6px;
   border: 1px solid black;
 }
 
