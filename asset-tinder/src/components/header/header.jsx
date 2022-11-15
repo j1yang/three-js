@@ -1,7 +1,14 @@
 import React from 'react';
+import Button from '../button/button';
+import HeaderNumPick from '../headeNumPick/headerNumPick';
+import HeaderColName from '../headerColName/headerColName';
+import HeaderProgress from '../headerProgress/headerProgress';
 import styles from './header.module.css';
 
-const Header = (props) => {
+const Header = ({getColNum}) => {
+
+  
+
   return(
     <div className={styles.header}>
       <div className={styles.title}>
@@ -10,18 +17,17 @@ const Header = (props) => {
       </div>
       <div className={styles.settings}>
         <div className={styles.numPic}>
-          <div className={styles.two}>2</div>
-          <div className={styles.three}>3</div>
+          <HeaderNumPick getColNum={getColNum}/>
         </div>
         <div className={styles.colNames}>
-          names
+          <HeaderColName/>
         </div>
         <div className={styles.enter}>
-          submit
+          <Button name={'Enter'}/>
         </div>
       </div>
       <div className={styles.progress}>
-        progress
+        <HeaderProgress/>
       </div>
     </div>
   );
