@@ -3,11 +3,11 @@ import ImageContainer from '../imageContainer/imageContainer';
 import Sidebar from '../sidebar/sidebar';
 import styles from './main.module.css';
 
-const Main = (props) => {
+const Main = ({colNum}) => {
   return(
     <section className={styles.section}>
       <Sidebar/>
-      <ImageContainer/>
+      <ImageContainer colNum={colNum}/>
     </section>
   );
 };

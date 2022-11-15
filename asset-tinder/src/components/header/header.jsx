@@ -1,14 +1,28 @@
 import React from 'react';
+import { useState } from 'react';
 import Button from '../button/button';
 import HeaderNumPick from '../headeNumPick/headerNumPick';
 import HeaderColName from '../headerColName/headerColName';
 import HeaderProgress from '../headerProgress/headerProgress';
 import styles from './header.module.css';
 
-const Header = ({getColNum}) => {
+const Header = ({getColNum, colNum}) => {
 
+  const btnSubmit = () => {
+    if(colNum === 2){
+      console.log("col 2")
+    }else if(colNum ===3){
+      console.log("col 3")
+    }else{
+      console.log("choose col num")
+    }
+  }
+  const [colNames, setColNames] = useState(null);
   
-
+  const getColNames = ()=> {
+    // colNames={getNames}
+  }
+  
   return(
     <div className={styles.header}>
       <div className={styles.title}>
@@ -20,10 +34,10 @@ const Header = ({getColNum}) => {
           <HeaderNumPick getColNum={getColNum}/>
         </div>
         <div className={styles.colNames}>
-          <HeaderColName/>
+          <HeaderColName colNum={colNum} />
         </div>
         <div className={styles.enter}>
-          <Button name={'Enter'}/>
+          <Button name={'Enter'} onClick={() => btnSubmit()}/>
         </div>
       </div>
       <div className={styles.progress}>
