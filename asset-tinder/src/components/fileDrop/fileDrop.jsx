@@ -3,19 +3,20 @@ import {useDropzone} from 'react-dropzone';
 import styles from './fileDrop.module.css';
 
 const FileDrop = ({onDrop}) => {
+  
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
-    maxFiles: 1,
-    accept: '.gltf, .glb',
+    // maxFiles: 2,
+    // accept: '.gltf, .glb',
   })
   return(
-    <div className="h-full w-screen flex flex-col items-center justify-center text-center" {...getRootProps()}>
-      <input {...getInputProps()} />
+    <div className={styles.container} {...getRootProps()}>
+      <input {...getInputProps()} directory="" webkitdirectory="" type="file" />
 
       {isDragActive ? (
-        <p className="text-4xl font-bold text-blue-600">Drop the files here ...</p>
+        <p className={styles.text_drop_file_here}>Drop the files here ...</p>
       ) : (
-        <p className="text-4xl font-bold ">
+        <p className={styles.text_drop_file_here}>
           Drag and drop your GLTF file <span className={styles.text_blue}>here</span>
         </p>
       )}

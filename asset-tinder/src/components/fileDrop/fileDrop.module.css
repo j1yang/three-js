@@ -1,3 +1,18 @@
 .text_blue{
   color: blue;
 }
+/* "h-full w-screen flex flex-col items-center justify-center text-center" */
+.container{
+  height:100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+}
+/* "text-4xl font-bold text-blue-600" */
+.text_drop_file_here{
+  text-align: center;
+  margin: 0;
+}
