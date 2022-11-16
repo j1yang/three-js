@@ -1,5 +1,6 @@
 import React from 'react';
-import { useDropzone } from 'react-dropzone'
+import {useDropzone} from 'react-dropzone';
+import styles from './fileDrop.module.css';
 
 const FileDrop = ({onDrop}) => {
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
@@ -7,7 +8,6 @@ const FileDrop = ({onDrop}) => {
     maxFiles: 1,
     accept: '.gltf, .glb',
   })
-
   return(
     <div className="h-full w-screen flex flex-col items-center justify-center text-center" {...getRootProps()}>
       <input {...getInputProps()} />
@@ -16,7 +16,7 @@ const FileDrop = ({onDrop}) => {
         <p className="text-4xl font-bold text-blue-600">Drop the files here ...</p>
       ) : (
         <p className="text-4xl font-bold ">
-          Drag {"'"}n{"'"} drop your GLTF file <span className="text-blue-600">here</span>
+          Drag and drop your GLTF file <span className={styles.text_blue}>here</span>
         </p>
       )}
       {fileRejections.length ? (
