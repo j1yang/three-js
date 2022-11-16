@@ -1,9 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import FileDrop from '../fileDrop/fileDrop';
+import Result from '../result/result';
 import styles from './imageContainer.module.css';
 
 
 const ImageContainer = ({colNum}) => {
+  const [buffer, setBuffer] = useState(1);
+
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
@@ -13,6 +16,7 @@ const ImageContainer = ({colNum}) => {
       reader.onload = () => {
       // Do whatever you want with the file contents
         const binaryStr = reader.result
+        console.log(`file name: ${file.name}`)
         console.log(binaryStr)
       }
       reader.readAsArrayBuffer(file)
@@ -25,7 +29,7 @@ const ImageContainer = ({colNum}) => {
       return(
         <section className={styles.twoCol}>
           <div className={styles.twoCol_first}>
-            <FileDrop onDrop={onDrop}/>
+            {buffer ? <Result/> : <FileDrop onDrop={onDrop}/>}
           </div>
           <div className={styles.twoCol_second}>
             <FileDrop onDrop={onDrop}/>
