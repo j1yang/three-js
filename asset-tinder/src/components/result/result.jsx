@@ -1,7 +1,10 @@
 import React from 'react';
+import styles from './result.module.css';
 
-const Result = (props) => (
-    <h1>result</h1>
+const Result = (props) => {
+  return(
+    <div className={styles.result}>result</div>
   );
+};
 
 export default Result;

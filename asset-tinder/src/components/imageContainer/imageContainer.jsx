@@ -1,11 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import FileDrop from '../fileDrop/fileDrop';
 import Result from '../result/result';
 import styles from './imageContainer.module.css';
 
+import useStore from './../../utils/store'
 
 const ImageContainer = ({colNum}) => {
-  const [buffer, setBuffer] = useState(1);
+  const { buffer } = useStore((state) => ({
+    buffer: state.buffer,
+  }))
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -15,13 +18,12 @@ const ImageContainer = ({colNum}) => {
       reader.onerror = () => console.log('file reading has failed')
       reader.onload = () => {
       // Do whatever you want with the file contents
-        const binaryStr = reader.result
-        console.log(`file name: ${file.name}`)
-        console.log(binaryStr)
+        const data = reader.result
+        //useStore.setState({ buffer: data, fileName: file.name })
       }
       reader.readAsArrayBuffer(file)
     })
-    
+    console.log(buffer)
   }, [])
 
   switch(colNum){

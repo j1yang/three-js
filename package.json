@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "microsoft-cognitiveservices-speech-sdk": "^1.24.1",
-    "three": "^0.145.0"
+    "three": "^0.145.0",
+    "zustand": "^4.1.4"
   }
 }
