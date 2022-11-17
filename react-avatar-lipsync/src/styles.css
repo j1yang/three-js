@@ -1,0 +1,36 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  background: #060818;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 4rem;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+
+.extra-info {
+  position: absolute;
+  bottom: 40%;
+  right: 15%;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+} 
