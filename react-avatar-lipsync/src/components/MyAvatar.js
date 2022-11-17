@@ -11,26 +11,24 @@ const MyAvatar = (props) => {
   const { actions } = useAnimations(animations, group);
   const headRef = useRef();
   const [arrVismeCode, setArrVisemeCode] = useState();
+  const [speed, setSpeed] = useState(0);
+  const [velocity, setVelocity] = useState(0.01);
   useFrame(()=>{
     let headObj = headRef.current;
+
     if(arrVismeCode !=null){
+      
       arrVismeCode.map(vc => {
-        let i = 0;
-        let velocity = 0.1;
-        while(true){
-          
-          i = i + velocity;
-
-            headObj.morphTargetInfluences[headObj.morphTargetDictionary[vc]] += i;
-
-            if(i = 1){
-              velocity = -velocity
-            }
-            if(i = 0){
-              velocity = 0
-              break;
-            }
-          }
+          // while(speed == 1){
+          //   headObj.morphTargetInfluences[headObj.morphTargetDictionary[vc]] = speed;
+          //   setSpeed(speed + velocity);
+          //   console.log(speed)
+          // }
+          // while(speed == 0){
+          //   headObj.morphTargetInfluences[headObj.morphTargetDictionary[vc]] = speed;
+          //   setSpeed(speed - velocity);
+          //   console.log(speed)
+          // }
         }
       )
     }
