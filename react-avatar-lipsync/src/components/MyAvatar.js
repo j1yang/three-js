@@ -15,29 +15,34 @@ const MyAvatar = (props) => {
   const [velocity, setVelocity] = useState(0.01);
   useFrame(()=>{
     let headObj = headRef.current;
-
-    if(arrVismeCode !=null){
-      
+    if(arrVismeCode != null){
       arrVismeCode.map(vc => {
-          // while(speed == 1){
-          //   headObj.morphTargetInfluences[headObj.morphTargetDictionary[vc]] = speed;
-          //   setSpeed(speed + velocity);
-          //   console.log(speed)
-          // }
-          // while(speed == 0){
-          //   headObj.morphTargetInfluences[headObj.morphTargetDictionary[vc]] = speed;
-          //   setSpeed(speed - velocity);
-          //   console.log(speed)
-          // }
-        }
-      )
+        animateViseme(vc, headRef.current)
+      })
     }
-    // if (headObj.morphTargetInfluences[headObj.morphTargetDictionary['viseme_SS']] + 0.01 < 1) {
-    //   headObj.morphTargetInfluences[headObj.morphTargetDictionary['viseme_SS']] += 0.01
-    // } else {
-    //   headObj.morphTargetInfluences[headObj.morphTargetDictionary['viseme_SS']] = 0
-    // }
+    
   })
+
+  function animateViseme(visemeCode, morphParent){
+    let s = 0;
+    if(visemeCode != 'viseme_Sil'){
+      while(s < 1){
+        console.log(s);
+        s += 0.01;
+        morphParent.morphTargetInfluences[morphParent.morphTargetDictionary['viseme_PP']] = s;
+      }
+      while(s > 0){
+        console.log(s);
+        s -= 0.01;
+        morphParent.morphTargetInfluences[morphParent.morphTargetDictionary['viseme_PP']] = s;
+      }
+    }
+  }
+
+  useEffect(() =>  {
+    
+    
+  },[arrVismeCode]);
 
   // once MyAvatar.js is loaded
   useEffect(() =>  {
