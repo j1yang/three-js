@@ -15,7 +15,7 @@ const MyAvatar = (props) => {
 
   let lastCheck = 0;
   useFrame((state,delta)=>{
-    if (lastCheck >= 0.3) { //Frame Every 100ms
+    if (lastCheck >= 0.1) { //Frame Every 100ms
       console.log("frame active") //frame active
 
       if(arrVismeCode != null){//if array Viseme is not null
@@ -24,7 +24,7 @@ const MyAvatar = (props) => {
         //reset avatar viseme influecnes
         //resetMouth();
 
-        let maxInfluence = 0.25;
+        let maxInfluence = 0.42;
         //mapping viseme array
         arrVismeCode.map((vc)=>{
           let openCheck = 0;
