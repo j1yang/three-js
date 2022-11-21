@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame } from '@react-three/fiber';
+import { SimpleSpeechPhrase } from 'microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/Exports';
 
 const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
 
@@ -14,28 +15,34 @@ const MyAvatar = (props) => {
 
   let lastCheck = 0;
   useFrame((state,delta)=>{
-    if (lastCheck >= 1) { //Frame Every 100ms
+    if (lastCheck >= 0.5) { //Frame Every 100ms
       console.log("frame active") //frame active
 
       if(arrVismeCode != null){//if array Viseme is not null
+        console.log("Viseme active");//visime active
+
         //reset avatar viseme influecnes
         resetMouth();
 
         //mapping viseme array
         arrVismeCode.map((vc)=>{
-          //OPEN MOUTH: set lip position at 0.55
-          headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = 0.55;
+          let openCheck = 0;
+          //OPEN MOUTH: set lip position at 0.55 
+          while(openCheck <= 0.66){
+            openCheck += 0.0005;
+            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = openCheck;
+            console.log(`${vc} open log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
+          }
 
           //display mouth open with influence
           console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
 
+          let closeCheck = 0;
           //CLOSE MOUTH with the buffer: set lip position at 0.
-          let mouthResetCheck = 0;
-          while(mouthResetCheck >= 0.5){
-            mouthResetCheck += delta;
-            console.log(mouthResetCheck)
-            resetMouth();
-            mouthResetCheck = 0;
+          while(closeCheck >= 0.66){
+            closeCheck -= 0.0005;
+            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = closeCheck;
+            console.log(`${vc} open log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
           }
 
           //display mouth close with influence
@@ -175,7 +182,7 @@ const MyAvatar = (props) => {
   
 
   return (
-    <group ref={group} {...props} dispose={null} rotation={[0.05, 89.0, -0.1]}>
+    <group ref={group} {...props} dispose={null} rotation={[0.59, 95.0, -0.2]}>
       <group name="Scene">
         <group name="Armature">
           <primitive object={nodes.Hips} />
