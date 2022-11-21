@@ -15,14 +15,15 @@ const MyAvatar = (props) => {
 
   let lastCheck = 0;
   useFrame((state,delta)=>{
-    if (lastCheck >= 0.4) { //Frame Every 100ms
+    if (lastCheck >= 0.3) { //Frame Every 100ms
       console.log("frame active") //frame active
 
       if(arrVismeCode != null){//if array Viseme is not null
         console.log("Viseme active");//visime active
 
         //reset avatar viseme influecnes
-        resetMouth();
+        //resetMouth();
+
         let maxInfluence = 0.25;
         //mapping viseme array
         arrVismeCode.map((vc)=>{
@@ -92,22 +93,32 @@ const MyAvatar = (props) => {
 
   function getViseme(word){
     const dict = {
-      p: "viseme_PP",
+      a: "viseme_aa",
       b: "viseme_PP",
-      m: "viseme_PP",
-      f: "viseme_FF",
-      v: "viseme_FF",
-      th: "viseme_TH",
+      c: "viseme_I",
       d: "viseme_DD",
-      t: "viseme_DD",
-      k: "viseme_kk",
+      e: "viseme_E",
+      f: "viseme_FF",
       g: "viseme_kk",
-      s: "viseme_SS",
-      z: "viseme_SS",
-      n: "viseme_nn",
+      h: "viseme_TH",
+      i: "viseme_aa",
+      j: "viseme_E",
+      k: "viseme_kk",
       l: "viseme_nn",
+      m: "viseme_PP",
+      n: "viseme_nn",
+      o: "viseme_U",
+      p: "viseme_PP",
+      q: "viseme_kk",
       r: "viseme_RR",
-      e: "viseme_E"
+      s: "viseme_SS",
+      t: "viseme_DD",
+      u: "viseme_U",
+      v: "viseme_FF",
+      w: "viseme_U",
+      x: "viseme_E",
+      y: "viseme_O",
+      z: "viseme_SS"
     }
 
     var charArr = word.toLowerCase().split('');
