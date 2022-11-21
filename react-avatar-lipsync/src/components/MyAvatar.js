@@ -15,7 +15,7 @@ const MyAvatar = (props) => {
 
   let lastCheck = 0;
   useFrame((state,delta)=>{
-    if (lastCheck >= 0.5) { //Frame Every 100ms
+    if (lastCheck >= 0.4) { //Frame Every 100ms
       console.log("frame active") //frame active
 
       if(arrVismeCode != null){//if array Viseme is not null
@@ -23,27 +23,27 @@ const MyAvatar = (props) => {
 
         //reset avatar viseme influecnes
         resetMouth();
-
+        let maxInfluence = 0.25;
         //mapping viseme array
         arrVismeCode.map((vc)=>{
           let openCheck = 0;
           //OPEN MOUTH: set lip position at 0.55 
-          while(openCheck <= 0.66){
-            openCheck += 0.0005;
+          while(openCheck <= maxInfluence){
+            openCheck += 0.0001;
             headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = openCheck;
-            console.log(`${vc} open log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
+            //console.log(`${vc} close log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
           }
 
           //display mouth open with influence
           console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
 
-          let closeCheck = 0;
+          let closeCheck = maxInfluence;
           //CLOSE MOUTH with the buffer: set lip position at 0.
-          while(closeCheck >= 0.66){
-            closeCheck -= 0.0005;
-            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = closeCheck;
-            console.log(`${vc} open log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
-          }
+          // while(closeCheck >= 0){
+          //   closeCheck -= 0.0001;
+          //   headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = closeCheck;
+          //   //console.log(`${vc} open log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
+          // }
 
           //display mouth close with influence
           console.log(`${vc} MOUTH CLOSED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
