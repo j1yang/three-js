@@ -20,7 +20,7 @@ const MyAvatar = (props) => {
 
       if(arrVismeCode != null){//if array Viseme is not null
         console.log("Viseme active");//visime active
-
+        console.log(arrVismeCode)
         //reset avatar viseme influecnes
         //resetMouth();
 
@@ -30,7 +30,8 @@ const MyAvatar = (props) => {
           let openCheck = 0;
           //OPEN MOUTH: set lip position at 0.55 
           while(openCheck <= maxInfluence){
-            openCheck += 0.0001;
+            openCheck += 0.000005;
+            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = openCheck;
             headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = openCheck;
             //console.log(`${vc} close log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
           }
@@ -53,7 +54,6 @@ const MyAvatar = (props) => {
         //reset influences of the avatar
         resetMouth();
       }
-
       //reset arrVisemeCode
       setArrVisemeCode(null);
       lastCheck = 0;
@@ -64,22 +64,22 @@ const MyAvatar = (props) => {
 })
 
   function resetMouth() {
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_Sil']] = 0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_PP']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_FF']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_TH']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_DD']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_kk']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_CH']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_SS']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_nn']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_RR']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_aa']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_E']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_I']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_O']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_U']] =0;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_Sil']] = 0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_PP']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_FF']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_TH']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_DD']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_kk']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_CH']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_SS']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_nn']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_RR']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_aa']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_E']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_I']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_O']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_U']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.02;
   }
 
   // once MyAvatar.js is loaded
@@ -119,6 +119,10 @@ const MyAvatar = (props) => {
       x: "viseme_E",
       y: "viseme_O",
       z: "viseme_SS"
+    }
+
+    if(word == 'the'){
+      return ["viseme_TH"];
     }
 
     var charArr = word.toLowerCase().split('');
