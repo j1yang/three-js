@@ -15,7 +15,7 @@ const MyAvatar = (props) => {
 
   let lastCheck = 0;
   useFrame((state,delta)=>{
-    if (lastCheck >= 0.1) { //Frame Every 100ms
+    if (lastCheck >= 0.05) { //Frame Every 100ms
       console.log("frame active") //frame active
       if(arrVismeCode != null){//if array Viseme is not null
         console.log("Viseme active");//visime active
@@ -23,13 +23,12 @@ const MyAvatar = (props) => {
         //reset avatar viseme influecnes
         //resetMouth();
 
-        let maxInfluence = 0.33;
+        let maxInfluence = 0.3;
         //mapping viseme array
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.1;
 
-        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 0.1;
-        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = 0.2;
-        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['tongueOut']] = .1;
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 1;
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = .2;
 
 
 
@@ -68,6 +67,7 @@ const MyAvatar = (props) => {
 })
 
 
+// default face motions
 let eyeCheck = 0
 let noseCheck = 0;
 useFrame((state,delta)=>{
@@ -112,6 +112,9 @@ useFrame((state,delta)=>{
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['eyesClosed']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerLeft']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerRight']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthSmile']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = 0;
+
   }
 
   // once MyAvatar.js is loaded
