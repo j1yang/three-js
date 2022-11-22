@@ -17,24 +17,27 @@ const MyAvatar = (props) => {
   useFrame((state,delta)=>{
     if (lastCheck >= 0.1) { //Frame Every 100ms
       console.log("frame active") //frame active
-
       if(arrVismeCode != null){//if array Viseme is not null
         console.log("Viseme active");//visime active
         console.log(arrVismeCode)
         //reset avatar viseme influecnes
         //resetMouth();
 
-        let maxInfluence = 0.42;
+        let maxInfluence = 0.33;
         //mapping viseme array
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.1;
+
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 0.1;
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = 0.2;
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['tongueOut']] = .1;
+
+
+
         arrVismeCode.map((vc)=>{
           let openCheck = 0;
           //OPEN MOUTH: set lip position at 0.55 
-          while(openCheck <= maxInfluence){
-            openCheck += 0.000005;
-            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = openCheck;
-            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = openCheck;
-            //console.log(`${vc} close log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
-          }
+          headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.25;
+            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence;
 
           //display mouth open with influence
           console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
@@ -48,11 +51,11 @@ const MyAvatar = (props) => {
           // }
 
           //display mouth close with influence
-          console.log(`${vc} MOUTH CLOSED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
+          // console.log(`${vc} MOUTH CLOSED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
         })
       }else{//if arr visim is null
         //reset influences of the avatar
-        resetMouth();
+        resetFace();
       }
       //reset arrVisemeCode
       setArrVisemeCode(null);
@@ -61,9 +64,33 @@ const MyAvatar = (props) => {
       // console.log(lastCheck)
       lastCheck += delta;
     }
+    
 })
 
-  function resetMouth() {
+
+let eyeCheck = 0
+let noseCheck = 0;
+useFrame((state,delta)=>{
+  if(eyeCheck > 3){
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['eyesClosed']] = 1;
+    eyeCheck= 0;
+  }else{
+    eyeCheck += delta;
+  }
+
+  if(noseCheck > 7){
+    if(Math.floor(Math.random() * 2) == 0){
+      headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerLeft']] = 0.8;
+    }else{
+      headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerRight']] = 0.1;
+    }
+    noseCheck = 0;
+  }else{
+    noseCheck+= delta;
+  }
+})
+
+  function resetFace() {
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_Sil']] = 0.02;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_PP']] =0.02;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_FF']] =0.02;
@@ -80,6 +107,11 @@ const MyAvatar = (props) => {
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_O']] =0.02;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_U']] =0.02;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.2;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['eyesClosed']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerLeft']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerRight']] = 0;
   }
 
   // once MyAvatar.js is loaded
