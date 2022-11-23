@@ -14,6 +14,7 @@ const MyAvatar = (props) => {
   const [arrVismeCode, setArrVisemeCode] = useState();
 
   let lastCheck = 0;
+  let openCheck = 0;
   useFrame((state,delta)=>{
     if (lastCheck >= 0.05) { //Frame Every 100ms
       console.log("frame active") //frame active
@@ -30,18 +31,17 @@ const MyAvatar = (props) => {
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 1;
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = .2;
 
-
-
         arrVismeCode.map((vc)=>{
-          let openCheck = 0;
+          // delta = 0.016
           //OPEN MOUTH: set lip position at 0.55 
           headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.25;
-            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence;
+          setTimeout(() => { 
+            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence; 
+            //display mouth open with influence
+            console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
+          }, 1000);
 
-          //display mouth open with influence
-          console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
-
-          let closeCheck = maxInfluence;
+          //let closeCheck = maxInfluence;
           //CLOSE MOUTH with the buffer: set lip position at 0.
           // while(closeCheck >= 0){
           //   closeCheck -= 0.0001;
@@ -63,7 +63,6 @@ const MyAvatar = (props) => {
       // console.log(lastCheck)
       lastCheck += delta;
     }
-    
 })
 
 
