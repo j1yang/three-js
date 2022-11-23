@@ -35,11 +35,9 @@ const MyAvatar = (props) => {
           // delta = 0.016
           //OPEN MOUTH: set lip position at 0.55 
           headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.25;
-          setTimeout(() => { 
-            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence; 
-            //display mouth open with influence
-            console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
-          }, 1000);
+          headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence; 
+          //display mouth open with influence
+          console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
 
           //let closeCheck = maxInfluence;
           //CLOSE MOUTH with the buffer: set lip position at 0.
