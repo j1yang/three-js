@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Suspense } from "react";
 
 import './App.css';
-import Avatar from './components/avatar/avatar';
+import Avatar from './components/avatar/Avatar';
 
 import { Canvas } from "@react-three/fiber";
 import AnimationBlob from './components/animationBlob/animationBlob';

@@ -8,7 +8,7 @@ const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
 const MyAvatar = (props) => {
 
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF("/animated_avatar.glb");
+  const { nodes, materials, animations } = useGLTF("https://api.readyplayer.me/v1/avatars/637f7b56ef99e7c7f3ca1b57.glb");
   const { actions } = useAnimations(animations, group);
   const headRef = useRef();
   const [arrVismeCode, setArrVisemeCode] = useState();
