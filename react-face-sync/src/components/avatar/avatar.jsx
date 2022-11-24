@@ -11,7 +11,10 @@ const Avatar = (props) => {
   // useEffect(() =>  {
   //   actions.AvatarIdle.play();
   // });
-  <group ref={group} {...props} dispose={null} rotation={[0.59, 95.0, -0.2]}>
+  // /https://dev.to/nourdinedev/how-to-use-threejs-and-react-to-render-a-3d-model-of-your-self-4kkf
+  console.log(nodes)
+  return(
+    <group ref={group} {...props} dispose={null} rotation={[0.59, 95.0, -0.2]}>
       <group name="Scene">
         <group name="Armature">
           <skinnedMesh
@@ -79,6 +82,7 @@ const Avatar = (props) => {
         </group>
       </group>
     </group>
+  );
 };
 useGLTF.preload("/avatar.glb");
 
