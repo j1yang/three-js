@@ -1,62 +1,63 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame } from '@react-three/fiber';
-import { SimpleSpeechPhrase } from 'microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/Exports';
 
 const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
 
 const MyAvatar = (props) => {
 
+  // Avatar Reference
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF("https://api.readyplayer.me/v1/avatars/637f7b56ef99e7c7f3ca1b57.glb");
-  const { actions } = useAnimations(animations, group);
   const headRef = useRef();
+
+  // glTF Avatar loads
+  const { nodes, materials, animations } = useGLTF("/animated_avatar.glb");
+  // Animation loads
+  const { actions } = useAnimations(animations, group);
+  
+  // Array ViseemCode
   const [arrVismeCode, setArrVisemeCode] = useState();
 
   let lastCheck = 0;
   let openCheck = 0;
+
+  // Execute code on every rendered frame
   useFrame((state,delta)=>{
-    if (lastCheck >= 0.05) { //Frame Every 100ms
+    // delta = 0.016
+    //Debouncing on executing code
+    if (lastCheck >= 0.01) { //Frame Every 100ms
       console.log("frame active") //frame active
+
       if(arrVismeCode != null){//if array Viseme is not null
         console.log("Viseme active");//visime active
-        console.log(arrVismeCode)
-        //reset avatar viseme influecnes
-        //resetMouth();
+        console.log(arrVismeCode);
 
         let maxInfluence = 0.3;
-        //mapping viseme array
+        
+        // Open Mouth etc
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.1;
-
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 1;
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = .2;
 
+        //mapping viseme array
         arrVismeCode.map((vc)=>{
-          // delta = 0.016
           //OPEN MOUTH: set lip position at 0.55 
           headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.25;
           headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence; 
+
           //display mouth open with influence
           console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
+        });
 
-          //let closeCheck = maxInfluence;
-          //CLOSE MOUTH with the buffer: set lip position at 0.
-          // while(closeCheck >= 0){
-          //   closeCheck -= 0.0001;
-          //   headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = closeCheck;
-          //   //console.log(`${vc} open log: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`)
-          // }
-
-          //display mouth close with influence
-          // console.log(`${vc} MOUTH CLOSED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
-        })
       }else{//if arr visim is null
         //reset influences of the avatar
         resetFace();
       }
-      //reset arrVisemeCode
+
+      //reset arrVisemeCode, lastCheck
       setArrVisemeCode(null);
       lastCheck = 0;
+
     } else {
       // console.log(lastCheck)
       lastCheck += delta;
@@ -67,15 +68,17 @@ const MyAvatar = (props) => {
 // default face motions
 let eyeCheck = 0
 let noseCheck = 0;
+
+// Frame
 useFrame((state,delta)=>{
-  if(eyeCheck > 3){
+  if(eyeCheck > 3){// Eye Blinking
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['eyesClosed']] = 1;
     eyeCheck= 0;
   }else{
     eyeCheck += delta;
   }
 
-  if(noseCheck > 7){
+  if(noseCheck > 7){// Nose Moving
     if(Math.floor(Math.random() * 2) == 0){
       headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerLeft']] = 0.8;
     }else{
@@ -87,6 +90,7 @@ useFrame((state,delta)=>{
   }
 })
 
+  // Reset Face
   function resetFace() {
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_Sil']] = 0.02;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_PP']] =0.02;
@@ -111,7 +115,6 @@ useFrame((state,delta)=>{
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['noseSneerRight']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthSmile']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = 0;
-
   }
 
   // once MyAvatar.js is loaded
@@ -121,8 +124,8 @@ useFrame((state,delta)=>{
     console.log(headRef);
   });
 
-  
-
+  // Get Visme ID from the word. 
+  // This function needs to be fixed for getting detail vismeCode
   function getViseme(word){
     const dict = {
       a: "viseme_aa",
@@ -171,63 +174,62 @@ useFrame((state,delta)=>{
     return visemeResult;
   }
 
-  const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken('df57e548c72643fbb8f3314bfd285e98', 'eastus2');
-  speechConfig.speechRecognitionLanguage = 'en-US';
-  const synthesizerAudioConfig = speechsdk.AudioConfig.fromDefaultSpeakerOutput();
-  const synthesizer = new speechsdk.SpeechSynthesizer(speechConfig, synthesizerAudioConfig);
+  // Speech Configruration
   const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
 
   const [n, setN] = useState(0);
   const [i, setI] = useState(0);
+
+  // Start Voice Recognition.
   function startvts(){
-    
+    // Recognition Configuration
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
+
+    // Start Recognizing
     recognition.start();
     
     let startIndex, endIndex = 0;
 
+    // Text
     recognition.onresult = function (event) {
-      setN(n+1)
+      setN(n+1);
       
       var final = "";
       let words = "";
       if (event.results[i].isFinal) {//slient
           final += event.results[i][0].transcript.split(" ").slice(-1);
-          console.log(`***final: ${final}` );
-          console.log(` ` )
+
+          // Debug
+          console.log(`***final: ${final}`);
+          console.log(` `);
+
+          // Get Viseme Code and set
           setArrVisemeCode(getViseme(final));
           console.log(arrVismeCode);
           setI(i+1);
       } else {//interim
         words += event.results[i][0].transcript;
         endIndex = words.length;
-        const interim = words.substring(startIndex,endIndex)
+        const interim = words.substring(startIndex,endIndex);
+
+        // Get Viseme Code and set
         setArrVisemeCode(getViseme(interim));
+
+        // Debug
         console.log(arrVismeCode);
-        console.log(`num: ${n}` )
-        console.log(`full sentence: ${words}` )
-        console.log(`***custom interim: ${interim}` )
+        console.log(`num: ${n}`);
+        console.log(`full sentence: ${words}`);
+        console.log(`***custom interim: ${interim}`);
         startIndex = endIndex;
-        console.log(` ` )
-
-          
+        console.log(` `);
       }
-  }
-
-    synthesizer.visemeReceived = function (s, e) {
-      // window.console.log("(Viseme), Audio offset: " + e.audioOffset / 10000 + "ms. Viseme ID: " + e.visemeId);
-      window.console.log(" Viseme ID: " + e.visemeId);
-      //window.console.log(" Viseme Animation: " + e.Animation);
-      // `Animation` is an xml string for SVG or a json string for blend shapes
-      var animation = e.Animation;
     }
   }
 
-  
-
+  // Render Avatar
   return (
     <group ref={group} {...props} dispose={null} rotation={[0.59, 95.0, -0.2]}>
       <group name="Scene">
