@@ -37,10 +37,15 @@ const MyAvatar = (props) => {
         
         // Open Mouth etc
         headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.1;
-        teethRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.1;
+        teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthOpen']] = .1;
 
-        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 1;
-        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = .2;
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 0.5;
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugLower']] = 0.5;
+
+        teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthShrugUpper']] = 0.5;
+        teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthShrugLower']] = 0.5;
+
+        headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = .1;
 
         // //mapping viseme array
         // arrVismeCode.map((vc)=>{
@@ -54,14 +59,18 @@ const MyAvatar = (props) => {
 
         arrVismeCode.forEach((vc)=>{
           //OPEN MOUTH: set lip position at 0.55 
-          headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.25;
-          teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['browInnerUp']] = 0.25;
+          headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.23;
+          teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['browInnerUp']] = 0.2;
+
+          headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['jawOpen']] = 0.1;
+          teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['jawOpen']] = 0.1;
+
           headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]] = maxInfluence; 
           teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary[vc]] = 1;
+          
           //display mouth open with influence
           console.log(`${vc} MOUTH OPENED: ${headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary[vc]]}`);
         })
-
 
       }else{//if arr visim is null
         //reset influences of the avatar
@@ -106,22 +115,22 @@ useFrame((state,delta)=>{
 
   // Reset Face
   function resetFace() {
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_Sil']] = 0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_PP']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_FF']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_TH']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_DD']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_kk']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_CH']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_SS']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_nn']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_RR']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_aa']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_E']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_I']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_O']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_U']] =0.01;
-    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.01;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_Sil']] = 0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_PP']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_FF']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_TH']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_DD']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_kk']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_CH']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_SS']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_nn']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_RR']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_aa']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_E']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_I']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_O']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['viseme_U']] =0.02;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthOpen']] = 0.02;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthShrugUpper']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.2;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['eyesClosed']] = 0;
@@ -130,24 +139,26 @@ useFrame((state,delta)=>{
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthSmile']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['cheekPuff']] = 0;
     headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['mouthFunnel']] = 0;
+    headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['jawOpen']] = 0;
 
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthFunnel']] = 0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_Sil']] = 0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_PP']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_FF']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_TH']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_DD']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_kk']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_CH']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_SS']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_nn']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_RR']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_aa']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_E']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_I']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_O']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_U']] =0.01;
-    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthOpen']] = 0.01;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['jawOpen']] = 0;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthFunnel']] = 0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_Sil']] = 0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_PP']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_FF']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_TH']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_DD']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_kk']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_CH']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_SS']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_nn']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_RR']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_aa']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_E']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_I']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_O']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['viseme_U']] =0.02;
+    teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthOpen']] = 0.02;
     teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['mouthShrugUpper']] = 0;
     teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['browInnerUp']] = 0.2;
     teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['eyesClosed']] = 0;
