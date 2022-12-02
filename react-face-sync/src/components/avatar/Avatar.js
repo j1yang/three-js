@@ -12,11 +12,13 @@ export default function Model(props) {
   const head = useRef();
   const { nodes, materials } = useGLTF('/avatar.glb')
   
-  function BufferPoints({ count = 1000 }) {
+  function BufferPoints({ count = 72 }) {
     const points = useMemo(() => {
       //const p = new Array(count).fill(0).map((v) => (0.5 - Math.random()) * 7.5);
       //console.log(new BufferAttribute(new Float32Array(p), 3))
-      return new BufferAttribute(new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[20].array),3);
+      const p = new Array(count).fill(0).map((v) => new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[v].array))
+      console.log(p)
+      return new BufferAttribute(new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[39].array),3);
     }, [count]);
   
     return (
@@ -25,7 +27,7 @@ export default function Model(props) {
           <bufferAttribute attach={"attributes-position"} {...points} />
         </bufferGeometry>
         <pointsMaterial
-          size={1}
+          size={0.0000001}
           threshold={0.1}
           color={0xFF0000}
           sizeAttenuation={true}
@@ -38,9 +40,10 @@ export default function Model(props) {
   useEffect(()=>{
     //console.log(nodes.Wolf3D_Head.geometry.morphAttributes.position[0].array[36])
     // console.log(Object.keys(nodes).length) // 78
-    console.log(nodes.Wolf3D_Head.geometry)
+    //console.log(nodes.Wolf3D_Head.geometry)
     console.log(nodes.Wolf3D_Head.geometry.morphAttributes) // position: array 72 > Float32Array 6486/3=2162
-    console.log(nodes.Wolf3D_Head.geometry.index) // BufferAttribute: 12282
+    console.log(new BufferAttribute(new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[40].array),3))
+    //console.log(nodes.Wolf3D_Head.geometry.index) // BufferAttribute: 12282
   })
 
   return (
