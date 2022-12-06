@@ -193,8 +193,9 @@ useFrame((state,delta)=>{
           micOn = false;
           console.log(micOn)
         } else {
-          interim += event.results[i][0].transcript;
           micOn = true;
+          interim += event.results[i][0].transcript;
+          
           console.log(micOn)
           console.log(interim)
         }
