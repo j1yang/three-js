@@ -4,7 +4,6 @@ import { useFrame } from '@react-three/fiber';
 
 
 const MyAvatar = (props) => {
-
   // Avatar Reference
   const group = useRef();
   const headRef = useRef();
@@ -14,14 +13,14 @@ const MyAvatar = (props) => {
   const { nodes, materials, animations } = useGLTF("/animated_avatar.glb");
   // Animation loads
   const { actions } = useAnimations(animations, group);
-  
-  // Array ViseemCode
-  const [arrVismeCode, setArrVisemeCode] = useState();
 
   const [pncViseme, setPncViseme] = useState([
     'viseme_PP', 'viseme_E', 'viseme_SS', 'viseme_E', 'viseme_DD', 'viseme_K', 'viseme_a', 'viseme_RR', 'viseme_O', 'viseme_D', 'viseme_SS'
   ]
   );
+
+  let micOn = false;
+
 
   let lastCheck = 0;
   let openCheck = 0;
@@ -38,35 +37,39 @@ const MyAvatar = (props) => {
   useFrame((state,delta)=>{
     // delta = 0.016
     //Debouncing on executing code
-    if (lastCheck >= 0.58) { //Frame Every 20ms
+    if (lastCheck >= 0.60) { //Frame Every 20ms 58
       console.log("frame active") //frame active
       
-          if(isDone == true){
-            let pncCount = 0;
+      if(micOn == true){
+        if(isDone == true){
+          let pncCount = 0;
+          
+          pncViseme.forEach((vc)=>{
+            pncCount ++;
+            isDone = false
+            //OPEN MOUTH: set lip position at 0.55 
+            headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.23;
+            teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['browInnerUp']] = 0.2;
+            teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['jawOpen']] = 0.1;
             
-            pncViseme.forEach((vc)=>{
-              pncCount ++;
-              isDone = false
-              //OPEN MOUTH: set lip position at 0.55 
-              headRef.current.morphTargetInfluences[headRef.current.morphTargetDictionary['browInnerUp']] = 0.23;
-              teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['browInnerUp']] = 0.2;
-              teethRef.current.morphTargetInfluences[teethRef.current.morphTargetDictionary['jawOpen']] = 0.1;
-              
-              setTimeout(function () {
-                animateLip(vc, headRef, teethRef, 0.3);
-              },pncCount * 50);
-    
-              
+            setTimeout(function () {
+              animateLip(vc, headRef, teethRef, 0.3);
+            },pncCount * 30);//50
+  
+            
 
-              if(vc == 'viseme_SS'){
-                isDone = true
-                pncCount = 0
-                
-              }
-              resetFace();
-            })
-            
-          }else{}
+            if(vc == 'viseme_SS'){
+              isDone = true
+              pncCount = 0
+              
+            }
+            resetFace();
+          })
+          
+        }
+      }else{
+        resetFace();
+      }
       lastCheck = 0;
     } else {
       // console.log(lastCheck)
@@ -158,67 +161,13 @@ useFrame((state,delta)=>{
   useEffect(() =>  {
     startvts();
     actions.AvatarIdle.play();
-    console.log(headRef);
   });
 
-  // Get Visme ID from the word. 
-  // This function needs to be fixed for getting detail vismeCode
-  function getViseme(word){
-    const dict = {
-      a: "viseme_aa",
-      b: "viseme_PP",
-      c: "viseme_I",
-      d: "viseme_DD",
-      e: "viseme_E",
-      f: "viseme_FF",
-      g: "viseme_kk",
-      h: "viseme_TH",
-      i: "viseme_aa",
-      j: "viseme_E",
-      k: "viseme_kk",
-      l: "viseme_nn",
-      m: "viseme_PP",
-      n: "viseme_nn",
-      o: "viseme_U",
-      p: "viseme_PP",
-      q: "viseme_kk",
-      r: "viseme_RR",
-      s: "viseme_SS",
-      t: "viseme_DD",
-      u: "viseme_U",
-      v: "viseme_FF",
-      w: "viseme_U",
-      x: "viseme_E",
-      y: "viseme_O",
-      z: "viseme_SS"
-    }
 
-    if(word == 'the'){
-      return ["viseme_TH"];
-    }else if(word == 'oh'){
-      return ["mouthFunnel"]
-    }
-
-    var charArr = word.toLowerCase().split('');
-    var visemeResult = [];
-
-    charArr.map(c => {
-      if(dict[c] == null){
-        visemeResult.push("viseme_Sil");
-      }else{
-        visemeResult.push(dict[c]);
-      }
-    });
-
-    return visemeResult;
-  }
 
   // Speech Configruration
   const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
-
-  const [n, setN] = useState(0);
-  const [i, setI] = useState(0);
 
   // Start Voice Recognition.
   function startvts(){
@@ -230,42 +179,28 @@ useFrame((state,delta)=>{
     // Start Recognizing
     recognition.start();
     
-    let startIndex, endIndex = 0;
-
+    
     // Text
     recognition.onresult = function (event) {
-      setN(n+1);
+      micOn = true;
       
       var final = "";
-      let words = "";
-      if (event.results[i].isFinal) {//slient
-          final += event.results[i][0].transcript.split(" ").slice(-1);
-
-          // Debug
-          console.log(`***final: ${final}`);
-          console.log(` `);
-
-          // Get Viseme Code and set
-          setArrVisemeCode(getViseme(final));
-          console.log(arrVismeCode);
-          setI(i+1);
-      } else {//interim
-        words += event.results[i][0].transcript;
-        endIndex = words.length;
-        const interim = words.substring(startIndex,endIndex);
-
-        // Get Viseme Code and set
-        setArrVisemeCode(getViseme(interim));
-
-        // Debug
-        console.log(arrVismeCode);
-        console.log(`num: ${n}`);
-        console.log(`full sentence: ${words}`);
-        console.log(`***custom interim: ${interim}`);
-        startIndex = endIndex;
-        console.log(` `);
+      var oldInterim = "";
+      var interim = "";
+      for (var i = 0; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final += event.results[i][0].transcript;
+          micOn = false;
+          console.log(micOn)
+        } else {
+          interim += event.results[i][0].transcript;
+          micOn = true;
+          console.log(micOn)
+          console.log(interim)
+        }
       }
     }
+    
   }
 
   // Render Avatar

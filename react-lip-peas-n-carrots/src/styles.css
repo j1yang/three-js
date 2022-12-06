@@ -34,3 +34,15 @@ a {
   flex-direction: column;
   z-index: 1;
 } 
+
+.micOn {
+  z-index: 1;
+  width: 80px;
+  cursor: pointer;
+}
+.micOff {
+  margin-top: 5px;
+  z-index: 1;
+  width: 80px;
+  cursor: pointer;
+}
