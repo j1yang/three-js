@@ -18,7 +18,7 @@ export default function Model(props) {
       //console.log(new BufferAttribute(new Float32Array(p), 3))
       const p = new Array(count).fill(0).map((v) => new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[v].array))
       console.log(p)
-      return new BufferAttribute(new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[39].array),3);
+      return new BufferAttribute(new Float32Array(nodes.Wolf3D_Head.geometry.morphAttributes.position[51].array),3);
     }, [count]);
   
     return (
